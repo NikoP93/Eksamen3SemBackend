@@ -58,7 +58,7 @@ public class DeliveryService {
             if (delivery.getDrone() == null){
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "No drone is attached");
             }else{
-                delivery.setActualDeliveryTime(LocalDateTime.MIN);
+                delivery.setActualDeliveryTime(LocalDateTime.now());
                 return new ResponseEntity<>(delivery, HttpStatus.OK);
             }
         }
