@@ -1,7 +1,7 @@
 package com.example.eksamen3sembackend.model;
 
 import jakarta.persistence.*;
-import org.springframework.cglib.core.Local;
+
 
 import java.time.LocalDateTime;
 

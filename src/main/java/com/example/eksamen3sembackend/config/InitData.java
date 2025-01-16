@@ -5,7 +5,6 @@ import com.example.eksamen3sembackend.repository.DeliveryRepository;
 import com.example.eksamen3sembackend.repository.DroneRepository;
 import com.example.eksamen3sembackend.repository.PizzaRepository;
 import com.example.eksamen3sembackend.repository.StationRepository;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

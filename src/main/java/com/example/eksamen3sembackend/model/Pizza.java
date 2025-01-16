@@ -1,10 +1,8 @@
 package com.example.eksamen3sembackend.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Set;
+
 
 @Entity
 public class Pizza {
