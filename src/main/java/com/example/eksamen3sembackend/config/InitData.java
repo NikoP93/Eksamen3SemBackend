@@ -31,7 +31,6 @@ public class InitData implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
 
-
         Station station1 = new Station();
         station1.setLatitude(55.41);
         station1.setLongitude(12.34);
