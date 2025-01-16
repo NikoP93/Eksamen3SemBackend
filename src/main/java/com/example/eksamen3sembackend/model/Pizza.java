@@ -16,8 +16,6 @@ public class Pizza {
     private int price;
 
 
-
-
     public int getPrice() {
         return price;
     }

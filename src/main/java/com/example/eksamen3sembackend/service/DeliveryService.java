@@ -4,6 +4,7 @@ import com.example.eksamen3sembackend.model.Delivery;
 import com.example.eksamen3sembackend.model.Drone;
 import com.example.eksamen3sembackend.repository.DeliveryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,12 @@ public class DeliveryService {
     @Autowired
     private DroneService droneService;
 
+
+
     public List<Delivery> getAllDeliveriesNotDelivered() {
-        return deliveryRepository.findAllByActualDeliveryTimeIsNull();
+        Sort sortOrder = Sort.by(Sort.Direction.ASC, "expectedDeliveryTime");
+        List<Delivery> deliveryList = deliveryRepository.findAllByActualDeliveryTimeIsNull(sortOrder);
+        return deliveryList;
     }
 
     public List<Delivery> getAllDeliveriesWithoutADrone(){
@@ -48,7 +53,7 @@ public class DeliveryService {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Drone is already attached");
             }
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Delivery does not exist");
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Delivery does not exist");
     }
 
     public ResponseEntity<Delivery> finishDelivery(int deliveryID) {
@@ -59,9 +64,10 @@ public class DeliveryService {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "No drone is attached");
             }else{
                 delivery.setActualDeliveryTime(LocalDateTime.now());
+                deliveryRepository.save(delivery);
                 return new ResponseEntity<>(delivery, HttpStatus.OK);
             }
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Delivery does not exist");
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Delivery does not exist");
     }
 }

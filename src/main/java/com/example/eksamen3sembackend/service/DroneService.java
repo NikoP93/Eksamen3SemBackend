@@ -22,18 +22,10 @@ public class DroneService {
     @Autowired
     private StationService stationService;
 
-    public int generateRandomNumber(){
-        Random rand = new Random();
-        return 1000 + rand.nextInt(9000);
-    }
+
 
     public List<Drone> getAllDrones() {
         return droneRepository.findAll();
-    }
-
-    //Der skal checkes om alle droner virker og hvis ikke, kaste en exception.
-    public Drone getRandomDrone(){
-       return droneRepository.findRandomDrone();
     }
 
     public ResponseEntity<Drone> addDrone(Drone drone) {
@@ -51,9 +43,22 @@ public class DroneService {
         Drone drone = droneOptional.get();
         drone.setStatus(status);
         droneRepository.save(drone);
-        return new ResponseEntity<Drone>(drone, HttpStatus.OK);
+        return new ResponseEntity<>(drone, HttpStatus.OK);
     }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+
+    //-------------------------------Hjælpe metoder-----------------------------------------
+    public int generateRandomNumber(){
+        Random rand = new Random();
+        return 1000 + rand.nextInt(9000);
+    }
+
+
+    //Der skal checkes om alle droner virker og hvis ikke, kaste en exception.
+    public Drone getRandomDrone(){
+        return droneRepository.findRandomDrone();
     }
 
 
