@@ -102,7 +102,6 @@ public class InitData implements CommandLineRunner {
         delivery2.setPizza(pizza2);
         delivery2.setExpectedDeliveryTime(LocalDateTime.now().plusMinutes(30));
         delivery2.setDrone(drone1);
-        delivery2.setActualDeliveryTime(LocalDateTime.now().plusMinutes(40));
         deliveryRepository.save(delivery2);
 
         Delivery delivery3 = new Delivery();

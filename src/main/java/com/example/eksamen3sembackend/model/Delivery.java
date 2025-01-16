@@ -20,7 +20,7 @@ public class Delivery {
     private Pizza pizza;
 
     @ManyToOne
-    @JoinColumn(name="doneidfk",referencedColumnName = "droneID")
+    @JoinColumn(name="droneidfk",referencedColumnName = "droneID")
     private Drone drone;
 
 

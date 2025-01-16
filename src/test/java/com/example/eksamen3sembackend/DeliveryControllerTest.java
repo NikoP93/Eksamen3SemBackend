@@ -1,0 +1,89 @@
+package com.example.eksamen3sembackend;
+
+import com.example.eksamen3sembackend.controller.DeliveryController;
+import com.example.eksamen3sembackend.model.Delivery;
+import com.example.eksamen3sembackend.model.Drone;
+import com.example.eksamen3sembackend.model.Station;
+import com.example.eksamen3sembackend.service.DeliveryService;
+import org.junit.jupiter.api.*;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
+
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class DeliveryControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+
+    @Order(1)
+    @Test
+    void getAllDeliveriesNotDelivered() throws Exception {
+        mockMvc.perform(get("/deliveries"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(3));
+    }
+
+    @Order(2)
+    @Test
+    void getAllDeliveriesWithoutADrone() throws Exception {
+        mockMvc.perform(get("/deliveries/queue"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(1));
+    }
+
+    @Order(3)
+    @Test
+    void addDelivery() throws Exception {
+        String newDeliveryJson = """
+                    {
+                        "adress": "Nyrnberggade 12",
+                        "pizza": {
+                            "pizzaID": 1
+                        }
+                    }
+                """;
+
+        mockMvc.perform(post("/deliveries/add")
+                        .contentType("application/json") // Specify content type as JSON
+                        .content(newDeliveryJson))      // Provide the JSON body
+                .andExpect(status().isCreated());
+    }
+
+    @Order(4)
+    @Test
+    void scheduleDelivery() throws Exception {
+        int deliveryId = 1;
+
+        mockMvc.perform(post("/deliveries/schedule/" + deliveryId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.drone").isNotEmpty())
+                .andExpect(jsonPath("$.deliveryID").value(deliveryId));
+    }
+
+    @Order(5)
+    @Test
+    void finishDelivery() throws Exception {
+        int deliveryId = 1;
+
+        mockMvc.perform(post("/deliveries/finish/" + deliveryId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.actualDeliveryTime").isNotEmpty())
+                .andExpect(jsonPath("$.deliveryID").value(deliveryId));
+    }
+
+
+
+}
