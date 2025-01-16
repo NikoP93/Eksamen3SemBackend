@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +46,7 @@ public class DroneService {
         droneRepository.save(drone);
         return new ResponseEntity<>(drone, HttpStatus.OK);
     }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Der er ingen drone at ændre status på");
     }
 
 
@@ -58,7 +59,11 @@ public class DroneService {
 
     //Der skal checkes om alle droner virker og hvis ikke, kaste en exception.
     public Drone getRandomDrone(){
-        return droneRepository.findRandomDrone();
+        Drone randomDrone = droneRepository.findRandomDrone();
+        if(randomDrone == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Der er ingen drone i databasen");
+        }
+        return randomDrone;
     }
 
 

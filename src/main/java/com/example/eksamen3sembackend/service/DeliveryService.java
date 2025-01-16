@@ -50,10 +50,10 @@ public class DeliveryService {
                 deliveryRepository.save(delivery);
                 return new ResponseEntity<>(delivery, HttpStatus.OK);
             }else{
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "Drone is already attached");
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Der er allerede en drone på denne levering");
             }
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Delivery does not exist");
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Leveringen findes ikke");
     }
 
     public ResponseEntity<Delivery> finishDelivery(int deliveryID) {
@@ -61,14 +61,14 @@ public class DeliveryService {
         if (optionalDelivery.isPresent()) {
             Delivery delivery = optionalDelivery.get();
             if (delivery.getDrone() == null){
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "No drone is attached");
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Der er ingen drone på denne opgave");
             }else{
                 delivery.setActualDeliveryTime(LocalDateTime.now());
                 deliveryRepository.save(delivery);
                 return new ResponseEntity<>(delivery, HttpStatus.OK);
             }
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Delivery does not exist");
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Leveringen findes ikke");
     }
 }
 

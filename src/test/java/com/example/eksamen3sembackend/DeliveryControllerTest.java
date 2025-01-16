@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -21,14 +22,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Transactional
 public class DeliveryControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
 
-    @Order(1)
+
     @Test
     void getAllDeliveriesNotDelivered() throws Exception {
         mockMvc.perform(get("/deliveries"))
@@ -36,7 +37,7 @@ public class DeliveryControllerTest {
                 .andExpect(jsonPath("$.size()").value(3));
     }
 
-    @Order(2)
+
     @Test
     void getAllDeliveriesWithoutADrone() throws Exception {
         mockMvc.perform(get("/deliveries/queue"))
@@ -44,7 +45,7 @@ public class DeliveryControllerTest {
                 .andExpect(jsonPath("$.size()").value(1));
     }
 
-    @Order(3)
+
     @Test
     void addDelivery() throws Exception {
         String newDeliveryJson = """
@@ -62,7 +63,7 @@ public class DeliveryControllerTest {
                 .andExpect(status().isCreated());
     }
 
-    @Order(4)
+
     @Test
     void scheduleDelivery() throws Exception {
         int deliveryId = 1;
@@ -73,10 +74,10 @@ public class DeliveryControllerTest {
                 .andExpect(jsonPath("$.deliveryID").value(deliveryId));
     }
 
-    @Order(5)
+
     @Test
     void finishDelivery() throws Exception {
-        int deliveryId = 1;
+        int deliveryId = 2;
 
         mockMvc.perform(post("/deliveries/finish/" + deliveryId))
                 .andExpect(status().isOk())
